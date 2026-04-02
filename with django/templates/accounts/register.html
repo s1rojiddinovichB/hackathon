@@ -31,6 +31,30 @@
         {% csrf_token %}
 
         <div class="fg">
+          <label>Ism</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}
+          <div style="color:var(--red);font-size:12px;margin-top:4px;">{{ form.first_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="fg">
+          <label>Familya</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}
+          <div style="color:var(--red);font-size:12px;margin-top:4px;">{{ form.last_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="fg">
+          <label>Yosh</label>
+          {{ form.age }}
+          {% if form.age.errors %}
+          <div style="color:var(--red);font-size:12px;margin-top:4px;">{{ form.age.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="fg">
           <label>Email</label>
           {{ form.email }}
           {% if form.email.errors %}

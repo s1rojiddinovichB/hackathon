@@ -15,7 +15,7 @@ User = get_user_model()
 
 def landing_view(request):
     if request.user.is_authenticated:
-        if not hasattr(request.user, 'profile') or not request.user.profile.onboarding_completed:
+        if not request.user.onboarding_completed:
             return redirect('onboarding')
         return redirect('dashboard')
     return render(request, 'landing.html')
@@ -36,8 +36,6 @@ def register_view(request):
                 last_name=form.cleaned_data['last_name'],
                 age=form.cleaned_data['age']
             )
-            from .models import UserProfile
-            UserProfile.objects.create(user=user)
             login(request, user, backend='accounts.backends.EmailBackend')
             return redirect('onboarding')
     else:
@@ -52,7 +50,7 @@ def register_view(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        if not hasattr(request.user, 'profile') or not request.user.profile.onboarding_completed:
+        if not request.user.onboarding_completed:
             return redirect('onboarding')
         return redirect('dashboard')
 
@@ -66,7 +64,7 @@ def login_view(request):
             )
             if user is not None:
                 login(request, user, backend='accounts.backends.EmailBackend')
-                if not hasattr(user, 'profile') or not user.profile.onboarding_completed:
+                if not user.onboarding_completed:
                     return redirect('onboarding')
                 return redirect('dashboard')
             else:
@@ -90,7 +88,7 @@ def logout_view(request):
 
 @login_required
 def onboarding_view(request):
-    if hasattr(request.user, 'profile') and request.user.profile.onboarding_completed:
+    if request.user.onboarding_completed:
         return redirect('dashboard')
 
     # Load onboarding structure from file.json
@@ -106,14 +104,12 @@ def onboarding_view(request):
     # Only stages 1-3 (not IQ test stage 4)
     stages = [s for s in onboarding_data.get('onboarding_stages', []) if s['stage'] <= 3]
 
-    # Restore saved progress and chat history from profile
-    profile = getattr(request.user, 'profile', None)
-    saved_data = profile.onboarding_data if profile else {}
-    saved_history = profile.chat_history if profile else []
+    saved_data = request.user.onboarding_data or {}
+    saved_history = request.user.chat_history or []
     saved_progress = {}
-    if profile and profile.onboarding_progress:
+    if request.user.onboarding_progress:
         try:
-            saved_progress = json.loads(profile.onboarding_progress)
+            saved_progress = json.loads(request.user.onboarding_progress)
         except Exception:
             saved_progress = {}
 
@@ -152,7 +148,7 @@ def iq_test_view(request):
 
 @login_required
 def dashboard_view(request):
-    if not hasattr(request.user, 'profile') or not request.user.profile.onboarding_completed:
+    if not request.user.onboarding_completed:
         return redirect('onboarding')
     from .models import StudyTrack
     tracks = list(StudyTrack.objects.filter(user=request.user).values(
@@ -161,12 +157,11 @@ def dashboard_view(request):
     # Convert datetimes to strings for JSON
     for t in tracks:
         t['created_at'] = t['created_at'].isoformat() if t['created_at'] else ''
-    profile = getattr(request.user, 'profile', None)
     return render(request, 'accounts/dashboard.html', {
         'user': request.user,
-        'chat_history_json': json.dumps(profile.chat_history if profile else []),
-        'weekly_plan_json': json.dumps(profile.weekly_plan if profile else {}),
-        'daily_plan_json': json.dumps(profile.daily_plan if profile else {}),
+        'chat_history_json': json.dumps(request.user.chat_history or []),
+        'weekly_plan_json': json.dumps(request.user.weekly_plan or {}),
+        'daily_plan_json': json.dumps(request.user.daily_plan or {}),
         'tracks_json': json.dumps(tracks),
     })
 
@@ -175,7 +170,7 @@ def dashboard_view(request):
 
 @login_required
 def profile_view(request):
-    if not hasattr(request.user, 'profile') or not request.user.profile.onboarding_completed:
+    if not request.user.onboarding_completed:
         return redirect('onboarding')
     import datetime
     # Build last 52 weeks activity grid (all zeros for MVP — no real tracking yet)

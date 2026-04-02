@@ -29,11 +29,25 @@ def api_google_auth(request):
         client_id = getattr(settings, 'GOOGLE_CLIENT_ID', '')
         idinfo = id_token.verify_oauth2_token(credential, g_requests.Request(), client_id)
         email = idinfo['email']
+        given_name = (idinfo.get('given_name') or '').strip()
+        family_name = (idinfo.get('family_name') or '').strip()
 
         user, created = User.objects.get_or_create(
             email=email,
-            defaults={'provider': 'google', 'password': make_password(None)}
+            defaults={
+                'first_name': given_name,
+                'last_name': family_name,
+                'age': 0,
+                'password': make_password(None),
+            }
         )
+        if given_name and not user.first_name:
+            user.first_name = given_name
+        if family_name and not user.last_name:
+            user.last_name = family_name
+        if created or given_name or family_name:
+            user.save()
+        user.provider = 'google'
 
         login(request, user, backend='accounts.backends.EmailBackend')
         return Response({
@@ -50,7 +64,17 @@ def api_google_auth(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_me(request):
-    return Response({'status': 'success', 'user': UserSerializer(request.user).data})
+    return Response({
+        'status': 'success',
+        'user': UserSerializer(request.user).data,
+        'profile': {
+            'provider': request.user.provider,
+            'onboarding_completed': request.user.onboarding_completed,
+            'onboarding_data': request.user.onboarding_data or {},
+            'iq_score': request.user.iq_score,
+            'psychological_profile': request.user.psychological_profile or {},
+        }
+    })
 
 
 # ─── Update user data ─────────────────────────────────────────────────────────

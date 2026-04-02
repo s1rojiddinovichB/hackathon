@@ -1,0 +1,932 @@
+{
+  "onboarding_stages": [
+
+    {
+      "stage": 1,
+      "title": "Shaxsiy Ma'lumotlar",
+      "description": "O'zingiz haqingizda gapirib bering",
+      "steps": [
+
+        {
+          "step": 1,
+          "fields": [
+            {
+              "id": "p1.1",
+              "question": "Ismingiz nima?",
+              "type": "text",
+              "field": "name",
+              "required": true
+            },
+            {
+              "id": "p1.2",
+              "question": "Familiyangiz nima?",
+              "type": "text",
+              "field": "surname",
+              "required": true
+            },
+            {
+              "id": "p1.3",
+              "question": "Tug'ilgan kuningiz qachon?",
+              "type": "date",
+              "field": "birth_date",
+              "required": true
+            },
+            {
+              "id": "p1.4",
+              "question": "Jinsingizni aniqlang",
+              "type": "select",
+              "field": "gender",
+              "options": ["Erkak", "Ayol"],
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 2,
+          "fields": [
+            {
+              "id": "p2.1",
+              "question": "Qaysi viloyatda yashaysiz?",
+              "type": "select",
+              "field": "region",
+              "options": [
+                "Toshkent shahri",
+                "Toshkent viloyati",
+                "Andijon viloyati",
+                "Farg'ona viloyati",
+                "Namangan viloyati",
+                "Samarqand viloyati",
+                "Buxoro viloyati",
+                "Xorazm viloyati",
+                "Qashqadaryo viloyati",
+                "Surxondaryo viloyati",
+                "Jizzax viloyati",
+                "Sirdaryo viloyati",
+                "Qoraqalpog'iston Respublikasi"
+              ],
+              "required": true
+            },
+            {
+              "id": "p2.2",
+              "question": "Qaysi tumanda yashaysiz?",
+              "type": "select",
+              "field": "district",
+              "depends_on": "region",
+              "options_by_region": {
+                "Toshkent shahri": [
+                  "Bektemir tumani",
+                  "Chilonzor tumani",
+                  "Hamza tumani",
+                  "Mirobod tumani",
+                  "Mirzo Ulug'bek tumani",
+                  "Olmazor tumani",
+                  "Sergeli tumani",
+                  "Shayxontohur tumani",
+                  "Uchtepa tumani",
+                  "Yakkasaroy tumani",
+                  "Yunusobod tumani",
+                  "Yashnobod tumani"
+                ],
+                "Toshkent viloyati": [
+                  "Angren shahri",
+                  "Bekobod shahri",
+                  "Bo'ka tumani",
+                  "Bo'stonliq tumani",
+                  "Chinoz tumani",
+                  "Ohangaron tumani",
+                  "Oqqo'rg'on tumani",
+                  "Parkent tumani",
+                  "Piskent tumani",
+                  "Qibray tumani",
+                  "Toshkent tumani",
+                  "Yangiyul tumani",
+                  "Zangiota tumani",
+                  "Yuqorichirchiq tumani",
+                  "Quyi Chirchiq tumani",
+                  "O'rta Chirchiq tumani"
+                ],
+                "Andijon viloyati": [
+                  "Andijon shahri",
+                  "Asaka tumani",
+                  "Baliqchi tumani",
+                  "Bo'z tumani",
+                  "Buloqboshi tumani",
+                  "Izboskan tumani",
+                  "Jalaquduq tumani",
+                  "Xo'jaobod tumani",
+                  "Marhamat tumani",
+                  "Oltinkol tumani",
+                  "Paxtaobod tumani",
+                  "Qo'rg'ontepa tumani",
+                  "Shahrixon tumani",
+                  "Ulug'nor tumani"
+                ],
+                "Farg'ona viloyati": [
+                  "Farg'ona shahri",
+                  "Qo'qon shahri",
+                  "Marg'ilon shahri",
+                  "Beshariq tumani",
+                  "Bog'dod tumani",
+                  "Buvayda tumani",
+                  "Dang'ara tumani",
+                  "Furqat tumani",
+                  "Oltiariq tumani",
+                  "Quva tumani",
+                  "Rishton tumani",
+                  "So'x tumani",
+                  "Toshloq tumani",
+                  "Uchko'prik tumani",
+                  "Yozyovon tumani"
+                ],
+                "Namangan viloyati": [
+                  "Namangan shahri",
+                  "Chortoq tumani",
+                  "Chust tumani",
+                  "Kosonsoy tumani",
+                  "Mingbuloq tumani",
+                  "Namangan tumani",
+                  "Norin tumani",
+                  "Pop tumani",
+                  "To'raqo'rg'on tumani",
+                  "Uychi tumani",
+                  "Yangiqo'rg'on tumani"
+                ],
+                "Samarqand viloyati": [
+                  "Samarqand shahri",
+                  "Kattaqo'rg'on shahri",
+                  "Bulung'ur tumani",
+                  "Ishtixon tumani",
+                  "Jomboy tumani",
+                  "Narpay tumani",
+                  "Nurobod tumani",
+                  "Oqdaryo tumani",
+                  "Pastdarg'om tumani",
+                  "Payariq tumani",
+                  "Qo'shrabot tumani",
+                  "Toyloq tumani",
+                  "Urgut tumani"
+                ],
+                "Buxoro viloyati": [
+                  "Buxoro shahri",
+                  "Kogon shahri",
+                  "G'ijduvon tumani",
+                  "Jondor tumani",
+                  "Qorakol tumani",
+                  "Qorovulbozor tumani",
+                  "Olot tumani",
+                  "Peshku tumani",
+                  "Romitan tumani",
+                  "Shofirkon tumani",
+                  "Vobkent tumani"
+                ],
+                "Xorazm viloyati": [
+                  "Urganch shahri",
+                  "Bog'ot tumani",
+                  "Gurlan tumani",
+                  "Xazarasp tumani",
+                  "Xiva tumani",
+                  "Xonqa tumani",
+                  "Qo'shko'pir tumani",
+                  "Shovot tumani",
+                  "Tuproqqal'a tumani",
+                  "Urganch tumani",
+                  "Yangibozor tumani",
+                  "Yangiariq tumani"
+                ],
+                "Qashqadaryo viloyati": [
+                  "Qarshi shahri",
+                  "Shahrisabz shahri",
+                  "Chiroqchi tumani",
+                  "Dehqonobod tumani",
+                  "G'uzor tumani",
+                  "Kamashi tumani",
+                  "Kasbi tumani",
+                  "Koson tumani",
+                  "Mirishkor tumani",
+                  "Muborak tumani",
+                  "Nishon tumani",
+                  "Qamashi tumani",
+                  "Yakkabog' tumani"
+                ],
+                "Surxondaryo viloyati": [
+                  "Termiz shahri",
+                  "Angor tumani",
+                  "Bandixon tumani",
+                  "Boysun tumani",
+                  "Denov tumani",
+                  "Jarqo'rg'on tumani",
+                  "Muzrabot tumani",
+                  "Oltinsoy tumani",
+                  "Qiziriq tumani",
+                  "Qumqo'rg'on tumani",
+                  "Sariosiyo tumani",
+                  "Sherobod tumani",
+                  "Sho'rchi tumani",
+                  "Uzun tumani"
+                ],
+                "Jizzax viloyati": [
+                  "Jizzax shahri",
+                  "Arnasoy tumani",
+                  "Baxmal tumani",
+                  "Do'stlik tumani",
+                  "Forish tumani",
+                  "G'allaorol tumani",
+                  "Mirzacho'l tumani",
+                  "Paxtakor tumani",
+                  "Sharof Rashidov tumani",
+                  "Yangiobod tumani",
+                  "Zarbdor tumani",
+                  "Zafarobod tumani",
+                  "Zomin tumani"
+                ],
+                "Sirdaryo viloyati": [
+                  "Guliston shahri",
+                  "Baxt tumani",
+                  "Boyovut tumani",
+                  "Mirzaobod tumani",
+                  "Oqoltin tumani",
+                  "Sardoba tumani",
+                  "Sayxunobod tumani",
+                  "Sirdaryo tumani",
+                  "Xovos tumani"
+                ],
+                "Qoraqalpog'iston Respublikasi": [
+                  "Nukus shahri",
+                  "Amudaryo tumani",
+                  "Beruniy tumani",
+                  "Chimboy tumani",
+                  "Ellikkala tumani",
+                  "Kegeyli tumani",
+                  "Mo'ynoq tumani",
+                  "Nukus tumani",
+                  "Qanliko'l tumani",
+                  "Qorao'zak tumani",
+                  "Qo'ng'irot tumani",
+                  "Shumanay tumani",
+                  "Taxtako'pir tumani",
+                  "To'rtko'l tumani",
+                  "Xo'jayli tumani"
+                ]
+              },
+              "required": true
+            },
+            {
+              "id": "p2.3",
+              "question": "Qaysi tilda gaplashasiz?",
+              "type": "select",
+              "field": "language",
+              "options": ["O'zbek", "Rus", "Ingliz", "Turk", "Qoraqalpoq"],
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 3,
+          "fields": [
+            {
+              "id": "p3.1",
+              "question": "Hozirgi mashg'ulotingiz nima?",
+              "type": "select",
+              "field": "occupation",
+              "options": [
+                "O'quvchi",
+                "Talaba",
+                "Ishlovchi",
+                "Freelancer",
+                "Tadbirkor",
+                "Boshqa"
+              ],
+              "required": true
+            },
+            {
+              "id": "p3.2",
+              "question": "Ta'lim darajangiz qanday?",
+              "type": "select",
+              "field": "education_level",
+              "options": [
+                "Maktab o'quvchisi",
+                "O'rta maxsus",
+                "Bakalavr",
+                "Magistr",
+                "Doktorant",
+                "Boshqa"
+              ],
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 4,
+          "fields": [
+            {
+              "id": "p4.1",
+              "question": "Kuniga o'qishga qancha vaqt ajrata olasiz?",
+              "type": "select",
+              "field": "daily_study_time",
+              "options": [
+                "30 daqiqagacha",
+                "30–60 daqiqa",
+                "1–2 soat",
+                "2–4 soat",
+                "4 soatdan ko'p"
+              ],
+              "required": true
+            },
+            {
+              "id": "p4.2",
+              "question": "Hozirda biror kurs yoki o'quv dasturida qatnashyapsizmi?",
+              "type": "boolean",
+              "field": "currently_enrolled",
+              "required": true
+            },
+            {
+              "id": "p4.3",
+              "question": "O'qishda asosiy maqsadingiz nima?",
+              "type": "text",
+              "field": "main_goal",
+              "placeholder": "Masalan: dasturlashni o'rganib, ish topmoqchiman",
+              "required": false
+            }
+          ]
+        }
+
+      ]
+    },
+
+    {
+      "stage": 2,
+      "title": "Qiziqishlar va Yo'nalishlar",
+      "description": "Foydalanuvchining qiziqishlari va moyilliklarini aniqlash",
+      "steps": [
+
+        {
+          "step": 1,
+          "fields": [
+            {
+              "id": "i1",
+              "question": "Quyidagi sohalardan qaysilari sizni eng ko'p qiziqtiradi?",
+              "type": "multi_select",
+              "field": "interests",
+              "options": [
+                "Dasturlash va IT",
+                "Dizayn va kreativlik",
+                "Biznes va tadbirkorlik",
+                "Fan va matematika",
+                "Til o'rganish",
+                "Psixologiya",
+                "Marketing",
+                "Sun'iy intellekt",
+                "Tarix va Siyosat",
+                "She'riyat va mutolaa",
+                "Musiqa va san'at",
+                "Sport"
+              ],
+              "required": true
+            },
+            {
+              "id": "i2",
+              "question": "Qanday o'rganish formatini yoqtirasiz?",
+              "type": "multi_select",
+              "field": "learning_format",
+              "options": [
+                "Video darslar",
+                "Matn va maqolalar",
+                "Amaliy topshiriqlar",
+                "Suhbat orqali",
+                "Test va viktorinalar"
+              ],
+              "required": true
+            },
+            {
+              "id": "i3",
+              "question": "Yangi mavzularni o'rganayotganda qaysi usul yaxshiroq ishlaydi siz uchun?",
+              "type": "select",
+              "field": "learning_style",
+              "options": [
+                "Avval nazariya, keyin amaliyot",
+                "To'g'ridan-to'g'ri amaliyotdan boshlash",
+                "Misol va analogiyalar orqali",
+                "Grafik va diagrammalar orqali"
+              ],
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 2,
+          "fields": [
+            {
+              "id": "i4",
+              "question": "Hozirda qanday ko'nikmalarni rivojlantirishni istaysiz?",
+              "type": "multi_select",
+              "field": "skills_to_develop",
+              "options": [
+                "Dasturlash",
+                "Tahliliy fikrlash",
+                "Muloqot va prezentatsiya",
+                "Loyiha boshqaruvi",
+                "AI va avtomatlashtirish",
+                "Ijodiy yozish"
+              ],
+              "required": true
+            },
+            {
+              "id": "i5",
+              "question": "Kelajakda qanday sohada ishlashni orzu qilasiz?",
+              "type": "text",
+              "field": "dream_career",
+              "placeholder": "Masalan: Front-end dasturchi yoki data scientist",
+              "required": false
+            },
+            {
+              "id": "i6",
+              "question": "Bo'sh vaqtingizda nima qilishni yoqtirasiz?",
+              "type": "multi_select",
+              "field": "hobbies",
+              "options": [
+                "Kitob o'qish",
+                "Dasturlar yozish",
+                "Musiqa tinglash",
+                "Sport",
+                "O'yin o'ynash",
+                "Sayohat",
+                "Ijtimoiy tarmoqlar"
+              ],
+              "required": false
+            }
+          ]
+        },
+
+        {
+          "step": 3,
+          "fields": [
+            {
+              "id": "i7",
+              "question": "Qaysi sohada bilim darajangiz eng past deb hisoblaysiz?",
+              "type": "text",
+              "field": "weakest_area",
+              "placeholder": "Masalan: matematika yoki ingliz tili",
+              "required": false
+            },
+            {
+              "id": "i8",
+              "question": "O'qishda sizga eng ko'p ilhom beradigan narsa nima?",
+              "type": "select",
+              "field": "motivation_source",
+              "options": [
+                "Yutuq va natijalarni ko'rish",
+                "Tengdoshlar bilan raqobat",
+                "Ustoz va mentorning rag'batlantirishi",
+                "Shaxsiy o'sish hissi",
+                "Moddiy mukofot"
+              ],
+              "required": true
+            },
+            {
+              "id": "i9",
+              "question": "Qaysi mavzularni o'rganish siz uchun qiyin bo'lgan?",
+              "type": "text",
+              "field": "difficult_topics",
+              "placeholder": "Mavzularni erkin yozing",
+              "required": false
+            },
+            {
+              "id": "i10",
+              "question": "5 yil ichida o'zingizni qanday tasavvur qilasiz?",
+              "type": "text",
+              "field": "five_year_vision",
+              "placeholder": "O'z orzuingizni tasvirlab bering",
+              "required": true
+            }
+          ]
+        }
+
+      ]
+    },
+
+    {
+      "stage": 3,
+      "title": "Psixologik Profil",
+      "description": "Foydalanuvchining shaxsiyat xususiyatlari va fikrlash uslubini aniqlash",
+      "steps": [
+
+        {
+          "step": 1,
+          "fields": [
+            {
+              "id": "ps1",
+              "question": "Siz yangi murakkab ish oldida qolsangiz, odatda nima qilasiz?",
+              "type": "select",
+              "field": "problem_approach",
+              "options": [
+                "Darhol boshlayman, yo'l-yo'lakay o'rganaman",
+                "Avval to'liq reja tuzaman, keyin boshlayman",
+                "Boshqalardan maslahat so'rayman",
+                "Biroz kutib, motivatsiya yig'aman"
+              ],
+              "required": true,
+              "ai_insight": "Harakat uslubi: impulsiv vs strategik vs ijtimoiy vs prokrastinatsion"
+            },
+            {
+              "id": "ps2",
+              "question": "O'qish jarayonida xato qilsangiz, ichingizda qanday his paydo bo'ladi?",
+              "type": "select",
+              "field": "failure_response",
+              "options": [
+                "O'zimni tanlashga harakat qilaman va davom etaman",
+                "Juda tushkunlashaman, vaqt kerak bo'ladi",
+                "Xatoni tahlil qilib, undan sabaq chiqaraman",
+                "E'tibor bermayman, davom etaveraman"
+              ],
+              "required": true,
+              "ai_insight": "Reziliyentlik va emotsional boshqaruv darajasi"
+            },
+            {
+              "id": "ps3",
+              "question": "Quyidagi gaplardan o'zingizga eng mos kelganini tanlang:",
+              "type": "select",
+              "field": "mindset_type",
+              "options": [
+                "Men qobiliyatlarim belgilangan, ba'zi narsalar menga kelmaydi",
+                "Har qanday narsani o'rgansa bo'ladi, vaqt va harakat kerak xolos",
+                "Ba'zi sohalar uchun qobiliyatim bor, boshqalari uchun yo'q",
+                "Hali aniq bilmayman"
+              ],
+              "required": true,
+              "ai_insight": "Fixed vs Growth Mindset tahlili"
+            }
+          ]
+        },
+
+        {
+          "step": 2,
+          "fields": [
+            {
+              "id": "ps4",
+              "question": "Siz ko'proq qanday muhitda ishlaysiz?",
+              "type": "select",
+              "field": "work_environment",
+              "options": [
+                "Yolg'iz, tinch muhitda",
+                "Guruhda, hamkorlikda",
+                "Ba'zan yolg'iz, ba'zan jamoa bilan",
+                "Muhit ahamiyatsiz, natija muhim"
+              ],
+              "required": true,
+              "ai_insight": "Introvert / Ekstrovert moyillik"
+            },
+            {
+              "id": "ps5",
+              "question": "'Yangi ish boshlandi' — bu so'zlarni ko'rganingizda birinchi xayolingizga nima keladi?",
+              "type": "select",
+              "field": "perception_test",
+              "options": [
+                "Imkoniyat — yangi narsa o'rganaman",
+                "Qiyinchilik — qayerdan boshlashni bilmayman",
+                "Mas'uliyat — bajarishim shart",
+                "Qiziqish — nima bo'lishini ko'raman"
+              ],
+              "required": true,
+              "prompt_to_ai": "Foydalanuvchi tanlagan variantni tahlil qiling: pessimistik yoki optimistik, muammo-markazli yoki yechim-markazli ekanligini aniqlang."
+            },
+            {
+              "id": "ps6",
+              "question": "3 ta so'z bilan o'zingizni tavsif qiling:",
+              "type": "text",
+              "field": "self_description",
+              "placeholder": "Masalan: qiziquvchan, mehnatsevar, ijodiy",
+              "required": true,
+              "prompt_to_ai": "Foydalanuvchi yozgan so'zlardan Big Five shaxsiyat xususiyatlarini (Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism) tahlil qiling."
+            }
+          ]
+        },
+
+        {
+          "step": 3,
+          "fields": [
+            {
+              "id": "ps7",
+              "question": "O'qishda maqsadga yetish yo'lida eng katta to'siq nima?",
+              "type": "select",
+              "field": "main_obstacle",
+              "options": [
+                "Vaqt yetishmasligi",
+                "Motivatsiya yo'qligi",
+                "Qayerdan boshlashni bilmaslik",
+                "Diqqat tarqoqligi",
+                "O'ziga ishonch yetishmasligi",
+                "Sharoit yetarli emas",
+                "Boshqa"
+              ],
+              "required": true,
+              "ai_insight": "Tashqi vs ichki to'siq — locus of control tahlili"
+            },
+            {
+              "id": "ps8",
+              "question": "Siz bir hafta davomida qattiq o'qidingiz, lekin testda past ball oldingiz. Nima deb o'ylaysiz?",
+              "type": "text",
+              "field": "attribution_style",
+              "placeholder": "Fikringizni erkin yozing",
+              "required": true,
+              "prompt_to_ai": "Javobni tahlil qiling: foydalanuvchi muvaffaqiyatsizlikni o'ziga (ichki) yoki tashqi omillarga bog'layaptimi? Attribution uslubini (internal vs external) aniqlang."
+            },
+            {
+              "id": "ps9",
+              "question": "Agar AI sizning shaxsiy o'qituvchingiz bo'lsa, qanday munosabatda bo'lishini istaysiz?",
+              "type": "select",
+              "field": "preferred_ai_tone",
+              "options": [
+                "Qattiq va talabchan — hech qanday uzr yo'q",
+                "Do'stona va rag'batlantiruvchi",
+                "Neytral va professional — faqat ma'lumot",
+                "Qiziqarli va hazilkash — o'yin-kulgi bilan"
+              ],
+              "required": true,
+              "ai_insight": "AI persona konfiguratsiyasi uchun asos"
+            },
+            {
+              "id": "ps10",
+              "question": "Ideal hayotingizda o'qish qanday o'rin tutadi? (3–5 jumla)",
+              "type": "textarea",
+              "field": "learning_philosophy",
+              "placeholder": "O'z fikringizni erkin ifodalang...",
+              "required": true,
+              "prompt_to_ai": "Ushbu esseni tahlil qiling: 1) O'qishga munosabat (majburiyat vs zavq), 2) Uzoq muddatli motivatsiya turi, 3) Shaxsiy AI o'qituvchi uchun optimal strategiya tavsiyasi."
+            }
+          ]
+        }
+
+      ]
+    },
+
+    {
+      "stage": 4,
+      "title": "IQ Test",
+      "description": "Foydalanuvchining aqliy qobiliyatini aniqlash",
+      "scoring": {
+        "method": "point_based",
+        "max_score": 47,
+        "levels": [
+          { "label": "Boshlang'ich",   "min": 0,  "max": 15 },
+          { "label": "O'rtacha",       "min": 16, "max": 28 },
+          { "label": "Yuqori",         "min": 29, "max": 38 },
+          { "label": "Juda yuqori",    "min": 39, "max": 47 }
+        ],
+        "question_types": {
+          "pattern_sequence":    { "description": "Ketma-ketlik va naqsh topish",       "max_point": 4 },
+          "odd_one_out":         { "description": "G'alat elementni topish",             "max_point": 5 },
+          "numerical_reasoning": { "description": "Raqamli munosabat va hisob-kitob",   "max_point": 7 },
+          "spatial_reasoning":   { "description": "Fazoviy va vizual fikrlash",          "max_point": 5 },
+          "verbal_reasoning":    { "description": "So'z munosabati va lug'at",           "max_point": 3 }
+        }
+      },
+      "steps": [
+
+        {
+          "step": 1,
+          "fields": [
+            {
+              "id": "iq1",
+              "question": "Keyin nima keladi?",
+              "type": "select",
+              "field": "iq_test_1",
+              "category": "pattern_sequence",
+              "image": "./images/iq/1.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/1_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/1_b.svg", "text": "", "point": 0 },
+                { "id": "C", "image": "./images/iq/1_c.svg", "text": "", "point": 4 },
+                { "id": "D", "image": "./images/iq/1_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "C",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 2,
+          "fields": [
+            {
+              "id": "iq2",
+              "question": "Qaysi biri g'alati?",
+              "type": "select",
+              "field": "iq_test_2",
+              "category": "odd_one_out",
+              "options": [
+                { "id": "A", "image": "./images/iq/2_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/2_b.svg", "text": "", "point": 5 },
+                { "id": "C", "image": "./images/iq/2_c.svg", "text": "", "point": 0 },
+                { "id": "D", "image": "./images/iq/2_d.svg", "text": "", "point": 0 },
+                { "id": "E", "image": "./images/iq/2_e.svg", "text": "", "point": 0 }
+              ],
+              "correct": "B",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 3,
+          "fields": [
+            {
+              "id": "iq3",
+              "question": "'Baxt' so'ziga eng yaqin ma'noga ega so'z qaysi?",
+              "type": "select",
+              "field": "iq_test_3",
+              "category": "verbal_reasoning",
+              "options": [
+                { "id": "A", "image": "", "text": "G'azablangan", "point": 0 },
+                { "id": "B", "image": "", "text": "Xursand",      "point": 3 },
+                { "id": "C", "image": "", "text": "Qayg'uli",     "point": 0 },
+                { "id": "D", "image": "", "text": "Charchagan",   "point": 0 }
+              ],
+              "correct": "B",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 4,
+          "fields": [
+            {
+              "id": "iq4",
+              "question": "Keyin nima keladi?",
+              "type": "select",
+              "field": "iq_test_4",
+              "category": "pattern_sequence",
+              "image": "./images/iq/4.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/4_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/4_b.svg", "text": "", "point": 5 },
+                { "id": "C", "image": "./images/iq/4_c.svg", "text": "", "point": 0 },
+                { "id": "D", "image": "./images/iq/4_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "B",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 5,
+          "fields": [
+            {
+              "id": "iq5",
+              "question": "So'roq belgisi o'rniga qaysi raqam qo'yilishi kerak?",
+              "type": "select",
+              "field": "iq_test_5",
+              "category": "numerical_reasoning",
+              "image": "./images/iq/5.svg",
+              "options": [
+                { "id": "A", "image": "", "text": "2", "point": 0 },
+                { "id": "B", "image": "", "text": "3", "point": 0 },
+                { "id": "C", "image": "", "text": "5", "point": 7 },
+                { "id": "D", "image": "", "text": "9", "point": 0 }
+              ],
+              "correct": "C",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 6,
+          "fields": [
+            {
+              "id": "iq6",
+              "question": "Javobni tanlang:",
+              "type": "select",
+              "field": "iq_test_6",
+              "category": "spatial_reasoning",
+              "image": "./images/iq/6.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/6_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/6_b.svg", "text": "", "point": 4 },
+                { "id": "C", "image": "./images/iq/6_c.svg", "text": "", "point": 0 },
+                { "id": "D", "image": "./images/iq/6_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "B",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 7,
+          "fields": [
+            {
+              "id": "iq7",
+              "question": "'Jasur' so'zining antonimi qaysi?",
+              "type": "select",
+              "field": "iq_test_7",
+              "category": "verbal_reasoning",
+              "options": [
+                { "id": "A", "image": "", "text": "Qo'rqoq", "point": 3 },
+                { "id": "B", "image": "", "text": "Halol",   "point": 0 },
+                { "id": "C", "image": "", "text": "Kuchli",  "point": 0 },
+                { "id": "D", "image": "", "text": "Quvnoq",  "point": 0 }
+              ],
+              "correct": "A",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 8,
+          "fields": [
+            {
+              "id": "iq8",
+              "question": "Javobni tanlang:",
+              "type": "select",
+              "field": "iq_test_8",
+              "category": "spatial_reasoning",
+              "image": "./images/iq/8.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/8_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/8_b.svg", "text": "", "point": 0 },
+                { "id": "C", "image": "./images/iq/8_c.svg", "text": "", "point": 5 },
+                { "id": "D", "image": "./images/iq/8_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "C",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 9,
+          "fields": [
+            {
+              "id": "iq9",
+              "question": "Javobni tanlang:",
+              "type": "select",
+              "field": "iq_test_9",
+              "category": "spatial_reasoning",
+              "image": "./images/iq/9.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/9_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/9_b.svg", "text": "", "point": 0 },
+                { "id": "C", "image": "./images/iq/9_c.svg", "text": "", "point": 6 },
+                { "id": "D", "image": "./images/iq/9_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "C",
+              "required": true
+            }
+          ]
+        },
+
+        {
+          "step": 10,
+          "fields": [
+            {
+              "id": "iq10",
+              "question": "Qaysi plitka yetishmayapti?",
+              "type": "select",
+              "field": "iq_test_10",
+              "category": "pattern_sequence",
+              "image": "./images/iq/10.svg",
+              "options": [
+                { "id": "A", "image": "./images/iq/10_a.svg", "text": "", "point": 0 },
+                { "id": "B", "image": "./images/iq/10_b.svg", "text": "", "point": 0 },
+                { "id": "C", "image": "./images/iq/10_c.svg", "text": "", "point": 5 },
+                { "id": "D", "image": "./images/iq/10_d.svg", "text": "", "point": 0 }
+              ],
+              "correct": "C",
+              "required": true
+            }
+          ]
+        }
+
+      ]
+    }
+
+  ],
+
+  "ai_profile_output": {
+    "description": "Barcha 4 bosqich tugagandan so'ng AI quyidagi profilni yaratadi",
+    "fields": [
+      "full_name",
+      "age",
+      "location",
+      "learning_style_summary",
+      "personality_type",
+      "mindset_label",
+      "motivation_profile",
+      "recommended_content_format",
+      "ai_tone_setting",
+      "iq_score",
+      "iq_level",
+      "iq_breakdown",
+      "weekly_study_plan_suggestion",
+      "risk_factors",
+      "strengths"
+    ]
+  }
+}

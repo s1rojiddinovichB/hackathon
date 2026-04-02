@@ -1,0 +1,304 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}IQ Test{% endblock %}
+
+{% block content %}
+<style>
+.iq-wrap { min-height:100vh; background:#f9fafb; display:flex; align-items:center; justify-content:center; padding:24px; }
+.iq-card { width:100%; max-width:860px; background:#fff; border-radius:24px; box-shadow:var(--shl); overflow:hidden; }
+.iq-header { padding:20px 28px; background:#f9fafb; border-bottom:1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center; }
+.iq-header-left { display:flex; align-items:center; gap:12px; }
+.iq-icon { width:44px; height:44px; background:var(--primary-light); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--primary); }
+.iq-title { font-size:17px; font-weight:700; }
+.iq-sub { font-size:13px; color:var(--gray-500); }
+.iq-prog-wrap { width:120px; }
+.iq-prog { height:6px; background:var(--gray-200); border-radius:999px; overflow:hidden; }
+.iq-prog-fill { height:100%; background:var(--primary); border-radius:999px; transition:width .3s; }
+.iq-prog-text { font-size:11px; color:var(--gray-400); text-align:right; margin-top:4px; }
+
+.iq-body { display:flex; overflow:hidden; }
+.iq-sidebar { width:240px; background:#f9fafb; border-right:1px solid var(--gray-200); padding:24px 20px; display:none; }
+@media(min-width:700px){ .iq-sidebar{display:block;} }
+.iq-sidebar h3 { font-size:14px; font-weight:600; margin-bottom:16px; color:var(--gray-700); }
+.iq-step-list { display:flex; flex-direction:column; gap:10px; }
+.iq-step-item { display:flex; align-items:center; gap:10px; }
+.iq-step-dot { width:22px; height:22px; border-radius:50%; border:2px solid var(--gray-200); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+.iq-step-dot.done { background:#22c55e; border-color:#22c55e; color:#fff; }
+.iq-step-dot.active { border-color:var(--primary); }
+.iq-step-dot.active::after { content:''; width:7px; height:7px; border-radius:50%; background:var(--primary); display:block; }
+.iq-step-label { font-size:13px; color:var(--gray-500); }
+.iq-step-label.active { color:var(--primary); font-weight:600; }
+
+.iq-content { flex:1; padding:32px; display:flex; flex-direction:column; align-items:center; overflow-y:auto; }
+.iq-question { font-size:20px; font-weight:600; text-align:center; margin-bottom:20px; color:var(--gray-800); }
+.iq-img-wrap { margin-bottom:24px; padding:16px; border:1px solid var(--gray-200); border-radius:16px; background:#f9fafb; max-width:560px; width:100%; display:flex; justify-content:center; }
+.iq-img-wrap img { max-height:220px; object-fit:contain; }
+
+.iq-opts { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; width:100%; max-width:600px; }
+@media(min-width:600px){ .iq-opts { grid-template-columns:repeat(4,1fr); } }
+.iq-opt {
+  border:2px solid var(--gray-200); border-radius:14px; padding:16px 12px;
+  cursor:pointer; transition:all .15s; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:8px;
+  min-height:80px; background:#fff;
+}
+.iq-opt:hover { border-color:var(--primary); box-shadow:var(--shm); }
+.iq-opt.sel { border-color:var(--primary); background:var(--primary-light); box-shadow:var(--shm); }
+.iq-opt img { max-height:80px; object-fit:contain; }
+.iq-opt-label { font-size:14px; font-weight:600; color:var(--gray-700); }
+.iq-opt.sel .iq-opt-label { color:var(--primary); }
+
+.iq-footer { display:flex; justify-content:flex-end; width:100%; max-width:600px; margin-top:24px; padding-top:16px; border-top:1px solid var(--gray-200); }
+
+/* Intro screen */
+.iq-intro { display:flex; flex-direction:column; align-items:center; text-align:center; padding:48px 32px; gap:20px; }
+.iq-intro-icon { width:80px; height:80px; background:var(--primary-light); border-radius:24px; display:flex; align-items:center; justify-content:center; color:var(--primary); animation:pulse 2s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+.iq-intro h1 { font-size:28px; font-weight:800; color:var(--gray-900); }
+.iq-intro p { font-size:16px; color:var(--gray-600); max-width:480px; line-height:1.7; }
+.iq-rules { background:var(--primary-light); border-radius:16px; padding:20px 24px; text-align:left; max-width:480px; width:100%; display:flex; flex-direction:column; gap:12px; }
+.iq-rule { display:flex; align-items:flex-start; gap:12px; }
+.iq-rule-ico { font-size:18px; }
+.iq-rule-txt strong { font-size:14px; font-weight:700; display:block; }
+.iq-rule-txt span { font-size:13px; color:var(--gray-500); }
+.iq-intro-btns { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; width:100%; max-width:480px; }
+.iq-intro-btns .btn { flex:1; min-width:160px; padding:14px; font-size:16px; font-weight:700; border-radius:14px; }
+</style>
+
+<div class="iq-wrap">
+  <div class="iq-card">
+
+    <!-- Intro Screen -->
+    <div id="intro-screen">
+      <div class="iq-intro">
+        <div class="iq-intro-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.14Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+        </div>
+        <h1>HamrohAI IQ Testi</h1>
+        <p>Ushbu test sizning mantiqiy fikrlashingizni va muammolarni hal qilish tezligingizni aniqlaydi.</p>
+        <div class="iq-rules">
+          <div class="iq-rule">
+            <div class="iq-rule-ico" style="color:var(--primary);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+            <div class="iq-rule-txt">
+              <strong>Tezlik masalasi</strong>
+              <span>Savollarni qanchalik tez yechsangiz, shunchalik ko'p ball olasiz.</span>
+            </div>
+          </div>
+          <div class="iq-rule">
+            <div class="iq-rule-ico" style="color:#22c55e;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </div>
+            <div class="iq-rule-txt">
+              <strong>30/70 Qoidasi</strong>
+              <span>Ballning 70% qismi aniqlikka, 30% qismi esa tezlikka bog'liq.</span>
+            </div>
+          </div>
+          <div class="iq-rule">
+            <div class="iq-rule-ico" style="color:#f59e0b;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+            <div class="iq-rule-txt">
+              <strong>10 ta savol</strong>
+              <span>Jami 10 ta savol, maksimal 47 ball.</span>
+            </div>
+          </div>
+        </div>
+        <div class="iq-intro-btns">
+          <button class="btn bp" onclick="startTest()">Testni boshlash</button>
+          <button class="btn bo" onclick="skipTest()">Hozircha o'tkazib yuborish</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Screen (hidden initially) -->
+    <div id="test-screen" style="display:none;">
+      <div class="iq-header">
+        <div class="iq-header-left">
+          <div class="iq-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.14Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24A2.5 2.5 0 0 0 14.5 2Z"/></svg>
+          </div>
+          <div>
+            <div class="iq-title">Qobiliyatni Aniqlash</div>
+            <div class="iq-sub" id="step-counter">Savol 1 / 10</div>
+          </div>
+        </div>
+        <div class="iq-prog-wrap">
+          <div class="iq-prog"><div class="iq-prog-fill" id="iq-prog-fill" style="width:0%"></div></div>
+          <div class="iq-prog-text" id="iq-prog-text">0%</div>
+        </div>
+      </div>
+
+      <div class="iq-body">
+        <div class="iq-sidebar">
+          <h3>🧭 Sizning Yo'lingiz</h3>
+          <div class="iq-step-list" id="step-list"></div>
+        </div>
+        <div class="iq-content">
+          <div class="iq-question" id="iq-question"></div>
+          <div class="iq-img-wrap" id="iq-img-wrap" style="display:none;">
+            <img id="iq-img" src="" alt="savol rasmi" onerror="this.closest('.iq-img-wrap').style.display='none'">
+          </div>
+          <div class="iq-opts" id="iq-opts"></div>
+          <div class="iq-footer">
+            <button class="btn bp" id="next-btn" onclick="nextQuestion()" disabled style="padding:12px 32px;font-size:15px;">
+              Keyingisi →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const IQ_STAGE = {{ iq_stage_json|safe }};
+
+let currentStepIdx = 0;
+let selectedOptionId = null;
+let totalWeightedPoints = 0;
+let questionStartTime = 0;
+
+function getCookie(name) {
+  let v = null;
+  document.cookie.split(';').forEach(c => {
+    c = c.trim();
+    if (c.startsWith(name + '=')) v = decodeURIComponent(c.substring(name.length + 1));
+  });
+  return v;
+}
+
+async function skipTest() {
+  // Mark onboarding complete without IQ
+  await fetch('/api/iq/save/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+    body: JSON.stringify({ iqScore: 0 })
+  });
+  window.location.href = '/dashboard/';
+}
+
+function startTest() {
+  document.getElementById('intro-screen').style.display = 'none';
+  document.getElementById('test-screen').style.display = 'block';
+  renderStep();
+  questionStartTime = Date.now();
+}
+
+function renderSidebar() {
+  if (!IQ_STAGE) return;
+  const maxSteps = IQ_STAGE.steps.length;
+  const list = document.getElementById('step-list');
+  list.innerHTML = IQ_STAGE.steps.map((step, i) => {
+    const field = step.fields[0];
+    const isDone = i < currentStepIdx;
+    const isActive = i === currentStepIdx;
+    return `<div class="iq-step-item">
+      <div class="iq-step-dot ${isDone ? 'done' : isActive ? 'active' : ''}">
+        ${isDone ? '✓' : ''}
+      </div>
+      <div class="iq-step-label ${isActive ? 'active' : ''}">Savol ${i + 1}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderStep() {
+  if (!IQ_STAGE) return;
+  const steps = IQ_STAGE.steps;
+  const maxSteps = steps.length;
+  const step = steps[currentStepIdx];
+  const field = step.fields[0];
+
+  // Update header
+  document.getElementById('step-counter').textContent = `Savol ${currentStepIdx + 1} / ${maxSteps}`;
+  const pct = Math.round(((currentStepIdx) / maxSteps) * 100);
+  document.getElementById('iq-prog-fill').style.width = pct + '%';
+  document.getElementById('iq-prog-text').textContent = pct + '%';
+
+  // Question
+  document.getElementById('iq-question').textContent = field.question;
+
+  // Image
+  const imgWrap = document.getElementById('iq-img-wrap');
+  const img = document.getElementById('iq-img');
+  if (field.image) {
+    const imgSrc = field.image.replace('./images/', '/static/images/');
+    img.src = imgSrc;
+    imgWrap.style.display = 'flex';
+  } else {
+    imgWrap.style.display = 'none';
+  }
+
+  // Options
+  const optsEl = document.getElementById('iq-opts');
+  optsEl.innerHTML = field.options.map(opt => {
+    const imgHtml = opt.image
+      ? `<img src="${opt.image.replace('./images/', '/static/images/')}" alt="${opt.id}"
+             onerror="this.style.display='none'">`
+      : '';
+    const label = opt.text ? `${opt.id}. ${opt.text}` : opt.id;
+    return `<div class="iq-opt" onclick="selectOpt(this,'${opt.id}')">
+      ${imgHtml}
+      <div class="iq-opt-label">${label}</div>
+    </div>`;
+  }).join('');
+
+  // Reset selection
+  selectedOptionId = null;
+  document.getElementById('next-btn').disabled = true;
+
+  renderSidebar();
+}
+
+function selectOpt(el, optId) {
+  document.querySelectorAll('.iq-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  selectedOptionId = optId;
+  document.getElementById('next-btn').disabled = false;
+}
+
+async function nextQuestion() {
+  if (!selectedOptionId) return;
+  const steps = IQ_STAGE.steps;
+  const field = steps[currentStepIdx].fields[0];
+
+  // Calculate time-weighted points
+  const endTime = Date.now();
+  const durationSec = Math.max((endTime - questionStartTime) / 1000, 0.5);
+  const selectedOpt = field.options.find(o => o.id === selectedOptionId);
+  const points = selectedOpt ? selectedOpt.point : 0;
+  const weighted = points * (0.7 + 0.3 * (12 / durationSec));
+  totalWeightedPoints += weighted;
+
+  currentStepIdx++;
+
+  if (currentStepIdx < steps.length) {
+    renderStep();
+    questionStartTime = Date.now();
+  } else {
+    // Test finished
+    const maxPossible = IQ_STAGE.scoring ? IQ_STAGE.scoring.max_score : 47;
+    let finalIQ = Math.round(totalWeightedPoints * (100 / maxPossible));
+    finalIQ = Math.min(Math.max(finalIQ, 40), 160);
+
+    // Save IQ score
+    await fetch('/api/iq/save/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({ iqScore: finalIQ })
+    });
+
+    // Generate profile
+    await fetch('/api/profile/generate/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      body: JSON.stringify({ iqScore: finalIQ })
+    });
+
+    window.location.href = '/dashboard/';
+  }
+}
+</script>
+{% endblock %}

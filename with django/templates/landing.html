@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}HamrohAI - AI bilan shaxsiy o'quv rejasi{% endblock %}
+
+{% block content %}
+<div class="lp">
+  <header class="lph">
+    <a href="/" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+      <div style="width:32px;height:32px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span style="font-size:18px;font-weight:700;color:var(--gray-900)">HamrohAI</span>
+    </a>
+    <nav class="lpn">
+      <button class="btn bo bsm" onclick="window.location.href='{% url 'login' %}'">Kirish</button>
+      <button class="btn bp bsm" onclick="window.location.href='{% url 'register' %}'">Boshlash</button>
+    </nav>
+  </header>
+
+  <main class="lhero">
+    <div class="hc">
+      <div class="hbdg">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+        </svg>
+        AI yordamida shaxsiy o'quv yo'lini yarating
+      </div>
+
+      <h1 class="htit">
+        O'rganishni<br>
+        <span class="l1">Aqlli qiling,</span><br>
+        <span class="l2">Natijaga erishing</span>
+      </h1>
+
+      <p class="hdesc">HamrohAI sizning bilim darajangizni tahlil qilib, maqsadlaringizga mos shaxsiy o'quv rejasi, kunlik va haftalik jadval tuzib beradi.</p>
+
+      <div class="hact">
+        <button class="btn bp blg" onclick="window.location.href='{% url 'register' %}'">Bepul boshlash</button>
+        <button class="btn bo blg" onclick="window.location.href='{% url 'login' %}'">Hisobga kirish</button>
+      </div>
+    </div>
+  </main>
+
+  <section class="lfeat">
+    <div class="lfeat-inner">
+      <h2 class="lfeat-title">Nima uchun HamrohAI?</h2>
+      <p class="lfeat-sub">Zamonaviy AI texnologiyasi bilan shaxsiylashtirilgan ta'lim tajribasi</p>
+
+      <div class="fgrid">
+        <div class="fc">
+          <div class="fic fic-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="ftit">Shaxsiy tahlil</div>
+          <div class="fdesc">AI siz bilan suhbat o'tkazib, bilim darajangiz va maqsadlaringizni aniqlab oladi.</div>
+        </div>
+
+        <div class="fc">
+          <div class="fic fic-2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <div class="ftit">Kunlik jadval</div>
+          <div class="fdesc">Soatma-soat o'quv jadvali, har bir mavzu uchun aniq vaqt va maqsad belgilanadi.</div>
+        </div>
+
+        <div class="fc">
+          <div class="fic fic-3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <div class="ftit">Yo'l xaritasi</div>
+          <div class="fdesc">8 haftalik batafsil o'quv yo'li, har hafta nima o'rganish kerakligini aniq ko'rasiz.</div>
+        </div>
+
+        <div class="fc">
+          <div class="fic fic-4">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="ftit">AI Chatbot</div>
+          <div class="fdesc">Bugungi reja bo'yicha savollar bering, AI yo'l ko'rsatib sizni to'g'ri yo'nalishda ushlab turadi.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="lft">© 2025 HamrohAI. Barcha huquqlar himoyalangan.</footer>
+</div>
+{% endblock %}

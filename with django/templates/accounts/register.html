@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Ro'yxatdan o'tish{% endblock %}
+
+{% block content %}
+<div class="ap">
+  <div class="ac">
+    <div class="ach">
+      <div class="alo">
+        <div class="alo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+      </div>
+      <h1 class="att">Hisob yaratish</h1>
+      <p class="ast">HamrohAI ga qo'shiling</p>
+    </div>
+    <div class="ab">
+      {% if messages %}
+      <div style="margin-bottom:16px;">
+        {% for message in messages %}
+        <div class="tst {% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% else %}info{% endif %}"
+             style="position:relative;animation:none;min-width:unset;max-width:unset;">
+          {{ message }}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="POST" novalidate class="svy4">
+        {% csrf_token %}
+
+        <div class="fg">
+          <label>Email</label>
+          {{ form.email }}
+          {% if form.email.errors %}
+          <div style="color:var(--red);font-size:12px;margin-top:4px;">{{ form.email.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <div class="fg">
+          <label>Parol</label>
+          {{ form.password }}
+          {% if form.password.errors %}
+          <div style="color:var(--red);font-size:12px;margin-top:4px;">{{ form.password.errors.0 }}</div>
+          {% endif %}
+        </div>
+
+        <button type="submit" class="btn bp bfw" style="margin-top:4px">Ro'yxatdan o'tish</button>
+      </form>
+
+      <div class="alink">Hisob bormi? <a href="{% url 'login' %}">Kiring</a></div>
+      <div class="alink" style="margin-top:6px"><a href="/" style="color:var(--gray-400)">← Bosh sahifa</a></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

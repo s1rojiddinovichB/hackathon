@@ -1,0 +1,463 @@
+{% extends 'base.html' %}
+{% block title %}Onboarding{% endblock %}
+
+{% block content %}
+<style>
+.ob-wrap { display:flex; height:100vh; background:#f9fafb; overflow:hidden; }
+
+/* Sidebar */
+.ob-side {
+  width:270px; background:#fff; border-right:1px solid var(--gray-200);
+  padding:24px 18px; display:flex; flex-direction:column; gap:4px;
+  overflow-y:auto; flex-shrink:0;
+}
+.ob-logo { font-size:18px; font-weight:800; margin-bottom:20px; display:flex; align-items:center; gap:6px; }
+.ob-stage-item { display:flex; align-items:flex-start; gap:10px; padding:10px 8px; border-radius:10px; position:relative; }
+.ob-stage-item.active { background:var(--primary-light); }
+.ob-stage-connector { position:absolute; left:19px; top:36px; bottom:-4px; width:2px; background:var(--gray-200); z-index:0; }
+.ob-stage-connector.done { background:#22c55e; }
+.ob-dot { width:22px; height:22px; border-radius:50%; border:2px solid var(--gray-200); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; z-index:1; background:#fff; }
+.ob-dot.done { background:#22c55e; border-color:#22c55e; color:#fff; }
+.ob-dot.active { border-color:var(--primary); }
+.ob-dot.active .ob-dot-inner { width:8px; height:8px; border-radius:50%; background:var(--primary); }
+.ob-stage-text { flex:1; }
+.ob-stage-title { font-size:13px; font-weight:600; color:var(--gray-600); }
+.ob-stage-item.active .ob-stage-title { color:var(--primary); }
+.ob-stage-item.done .ob-stage-title { color:var(--gray-800); }
+.ob-stage-desc { font-size:11px; color:var(--gray-400); margin-top:2px; line-height:1.4; }
+.ob-logout { margin-top:auto; padding-top:16px; font-size:12px; }
+
+/* Main */
+.ob-main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+.ob-header { padding:14px 28px; background:#fff; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; justify-content:space-between; gap:16px; flex-shrink:0; }
+.ob-header-title { font-size:15px; font-weight:700; }
+.ob-header-sub { font-size:12px; color:var(--gray-500); margin-top:1px; }
+.ob-prog-wrap { flex:1; max-width:200px; }
+.ob-prog { height:5px; background:var(--gray-100); border-radius:999px; }
+.ob-prog-fill { height:100%; background:var(--primary); border-radius:999px; transition:width .4s; }
+.ob-prog-text { font-size:11px; color:var(--gray-400); text-align:right; margin-top:3px; }
+
+/* Content area */
+.ob-content { flex:1; overflow-y:auto; padding:32px 40px; }
+.ob-step-card { background:#fff; border:1px solid var(--gray-200); border-radius:20px; box-shadow:var(--sh); max-width:700px; margin:0 auto; padding:32px; }
+.ob-step-header { margin-bottom:24px; }
+.ob-step-badge { display:inline-flex; align-items:center; gap:6px; background:var(--primary-light); color:var(--primary); padding:4px 12px; border-radius:999px; font-size:12px; font-weight:600; margin-bottom:10px; }
+.ob-step-title { font-size:20px; font-weight:700; color:var(--gray-800); }
+
+/* Fields */
+.ob-fields { display:flex; flex-direction:column; gap:20px; }
+.ob-field { display:flex; flex-direction:column; gap:6px; }
+.ob-label { font-size:14px; font-weight:600; color:var(--gray-700); }
+.ob-label .ob-req { color:var(--red); margin-left:2px; }
+.ob-field input[type=text], .ob-field input[type=date], .ob-field textarea, .ob-field select {
+  width:100%; padding:10px 14px; border:1.5px solid var(--gray-200); border-radius:10px;
+  font-size:14px; color:var(--gray-900); outline:none; font-family:inherit; background:#fff;
+  transition:border-color .15s, box-shadow .15s;
+}
+.ob-field input:focus, .ob-field textarea:focus, .ob-field select:focus {
+  border-color:var(--primary); box-shadow:0 0 0 3px rgba(37,99,235,.1);
+}
+
+/* Select options (styled buttons) */
+.ob-opts { display:flex; flex-direction:column; gap:8px; }
+.ob-opt-btn {
+  display:flex; align-items:center; gap:10px; padding:11px 14px;
+  border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;
+  font-size:14px; background:#fff; text-align:left; transition:all .15s; font-family:inherit;
+}
+.ob-opt-btn:hover { border-color:var(--primary); background:var(--primary-light); }
+.ob-opt-btn.sel { border-color:var(--primary); background:var(--primary-light); font-weight:600; color:var(--primary); }
+.ob-opt-btn.sel .ob-check { background:var(--primary); border-color:var(--primary); }
+.ob-check { width:18px; height:18px; border-radius:50%; border:2px solid var(--gray-300); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.ob-check svg { display:none; }
+.ob-opt-btn.sel .ob-check svg { display:block; }
+
+/* Multi-select grid */
+.ob-multi-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(160px,1fr)); gap:8px; }
+.ob-multi-btn {
+  display:flex; align-items:center; gap:8px; padding:9px 12px;
+  border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer;
+  font-size:13px; background:#fff; text-align:left; transition:all .15s; font-family:inherit;
+}
+.ob-multi-btn:hover { border-color:var(--primary); }
+.ob-multi-btn.sel { border-color:var(--primary); background:var(--primary-light); color:var(--primary); font-weight:600; }
+.ob-cb { width:16px; height:16px; border:2px solid var(--gray-300); border-radius:4px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.ob-multi-btn.sel .ob-cb { background:var(--primary); border-color:var(--primary); }
+
+/* Boolean */
+.ob-bool { display:flex; gap:10px; }
+.ob-bool-btn { flex:1; padding:11px; border:1.5px solid var(--gray-200); border-radius:10px; cursor:pointer; font-size:14px; background:#fff; font-family:inherit; transition:all .15s; font-weight:500; }
+.ob-bool-btn:hover { border-color:var(--primary); }
+.ob-bool-btn.sel { border-color:var(--primary); background:var(--primary-light); color:var(--primary); font-weight:600; }
+
+/* Navigation */
+.ob-nav { flex-shrink:0; padding:16px 40px; background:#fff; border-top:1px solid var(--gray-200); display:flex; justify-content:space-between; align-items:center; }
+.ob-nav-info { font-size:13px; color:var(--gray-400); }
+
+@media(max-width:700px){
+  .ob-side{display:none;}
+  .ob-content{padding:20px 16px;}
+  .ob-step-card{padding:20px;}
+  .ob-nav{padding:12px 16px;}
+}
+</style>
+
+<div class="ob-wrap">
+  <!-- Sidebar -->
+  <div class="ob-side">
+    <div class="ob-logo">
+      <div style="width:26px;height:26px;background:var(--primary);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="gt">HamrohAI</span>
+    </div>
+    <div id="sidebar-stages"></div>
+    <div class="ob-logout">
+      <a href="/logout/" style="color:var(--gray-400);">← Chiqish</a>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="ob-main">
+    <div class="ob-header">
+      <div>
+        <div class="ob-header-title" id="header-title">Yuklanmoqda...</div>
+        <div class="ob-header-sub" id="header-sub"></div>
+      </div>
+      <div class="ob-prog-wrap">
+        <div class="ob-prog"><div class="ob-prog-fill" id="prog-fill" style="width:0%"></div></div>
+        <div class="ob-prog-text" id="prog-text">0%</div>
+      </div>
+      <a href="/logout/" class="btn bsm bo">Chiqish</a>
+    </div>
+
+    <div class="ob-content">
+      <div class="ob-step-card" id="step-card">
+        <div id="step-content"></div>
+      </div>
+    </div>
+
+    <div class="ob-nav">
+      <div class="ob-nav-info" id="nav-info"></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn bo" id="prev-btn" onclick="goBack()" style="display:none;">← Orqaga</button>
+        <button class="btn bp" id="next-btn" onclick="goNext()" style="padding:10px 28px;">Keyingi →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const STAGES = {{ stages_json|safe }};
+let answers = {{ saved_data|safe }} || {};
+let savedProgress = {{ saved_progress|safe }} || {};
+
+// Flatten all steps across all stages into a linear list
+const ALL_STEPS = [];
+STAGES.forEach((stage, si) => {
+  stage.steps.forEach((step, sti) => {
+    ALL_STEPS.push({ stage, stageIdx: si, step, stepIdx: sti });
+  });
+});
+
+let currentIdx = 0;
+
+// Restore progress
+if (savedProgress.stepListIdx !== undefined) {
+  currentIdx = Math.min(savedProgress.stepListIdx, ALL_STEPS.length - 1);
+}
+
+// ─── Sidebar ──────────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const el = document.getElementById('sidebar-stages');
+  el.innerHTML = STAGES.map((stage, si) => {
+    const stepsInStage = ALL_STEPS.filter(s => s.stageIdx === si);
+    const firstIdx = ALL_STEPS.findIndex(s => s.stageIdx === si);
+    const lastIdx = firstIdx + stepsInStage.length - 1;
+    const isDone = currentIdx > lastIdx;
+    const isActive = currentIdx >= firstIdx && currentIdx <= lastIdx;
+    const isLast = si === STAGES.length - 1;
+    return `
+      <div class="ob-stage-item ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}" style="position:relative;">
+        ${!isLast ? `<div class="ob-stage-connector ${isDone ? 'done' : ''}"></div>` : ''}
+        <div class="ob-dot ${isDone ? 'done' : isActive ? 'active' : ''}">
+          ${isDone ? '✓' : isActive ? '<div class="ob-dot-inner"></div>' : si+1}
+        </div>
+        <div class="ob-stage-text">
+          <div class="ob-stage-title">${stage.title}</div>
+          <div class="ob-stage-desc">${stage.description}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ─── Progress ─────────────────────────────────────────────────────────────────
+function renderProgress() {
+  const pct = Math.round((currentIdx / ALL_STEPS.length) * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = pct + '%';
+
+  const cur = ALL_STEPS[currentIdx];
+  document.getElementById('header-title').textContent = `Bosqich ${cur.stage.stage}: ${cur.stage.title}`;
+  document.getElementById('header-sub').textContent = `Qadam ${cur.stepIdx + 1} / ${cur.stage.steps.length}`;
+  document.getElementById('nav-info').textContent = `${currentIdx + 1} / ${ALL_STEPS.length} qadam`;
+
+  const prevBtn = document.getElementById('prev-btn');
+  prevBtn.style.display = currentIdx > 0 ? 'inline-flex' : 'none';
+
+  const nextBtn = document.getElementById('next-btn');
+  const isLast = currentIdx === ALL_STEPS.length - 1;
+  nextBtn.textContent = isLast ? 'Tugatish ✓' : 'Keyingi →';
+}
+
+// ─── Render step ──────────────────────────────────────────────────────────────
+function renderStep() {
+  renderSidebar();
+  renderProgress();
+
+  const cur = ALL_STEPS[currentIdx];
+  const { stage, step } = cur;
+
+  let html = `<div class="ob-step-header">
+    <div class="ob-step-badge">Bosqich ${stage.stage} · Qadam ${cur.stepIdx + 1}</div>
+    <div class="ob-step-title">${stage.title}</div>
+  </div>
+  <div class="ob-fields" id="fields-container">`;
+
+  step.fields.forEach(field => {
+    html += renderField(field);
+  });
+
+  html += `</div>`;
+  document.getElementById('step-content').innerHTML = html;
+
+  // Attach events after render
+  step.fields.forEach(field => {
+    if (field.type === 'select' && field.depends_on) {
+      // district depends on region - update on region change
+    }
+    restoreFieldValue(field);
+  });
+
+  // district depends on region
+  const regionField = step.fields.find(f => f.field === 'region');
+  const districtField = step.fields.find(f => f.field === 'district');
+  if (regionField && districtField) {
+    const regionEl = document.querySelector(`[data-field="region"]`);
+    if (regionEl) {
+      regionEl.addEventListener('change', () => {
+        updateDistrictOptions(regionEl.value, districtField);
+      });
+      // Initial
+      if (answers['region']) updateDistrictOptions(answers['region'], districtField);
+    }
+  }
+}
+
+function renderField(field) {
+  const val = answers[field.field];
+  const req = field.required ? '<span class="ob-req">*</span>' : '';
+
+  let input = '';
+
+  if (field.type === 'text') {
+    input = `<input type="text" data-field="${field.field}" placeholder="${field.placeholder || ''}" value="${val || ''}" />`;
+  } else if (field.type === 'date') {
+    input = `<input type="date" data-field="${field.field}" value="${val || ''}" />`;
+  } else if (field.type === 'textarea') {
+    input = `<textarea data-field="${field.field}" rows="4" placeholder="${field.placeholder || ''}">${val || ''}</textarea>`;
+  } else if (field.type === 'boolean') {
+    const yesVal = val === true || val === 'true' || val === 'Ha';
+    const noVal = val === false || val === 'false' || val === "Yo'q";
+    input = `<div class="ob-bool">
+      <button type="button" class="ob-bool-btn ${yesVal ? 'sel' : ''}" data-field="${field.field}" data-val="Ha" onclick="selectBool(this)">Ha</button>
+      <button type="button" class="ob-bool-btn ${noVal ? 'sel' : ''}" data-field="${field.field}" data-val="Yo'q" onclick="selectBool(this)">Yo'q</button>
+    </div>`;
+  } else if (field.type === 'select' && field.depends_on === 'region') {
+    // District: dynamic options
+    const regionVal = answers['region'] || '';
+    const opts = (field.options_by_region && field.options_by_region[regionVal]) || [];
+    input = `<select data-field="${field.field}" id="district-select">
+      <option value="">Avval viloyatni tanlang</option>
+      ${opts.map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`).join('')}
+    </select>`;
+  } else if (field.type === 'select') {
+    const opts = field.options || [];
+    if (opts.length <= 6) {
+      // Styled button list
+      input = `<div class="ob-opts">
+        ${opts.map(o => `<button type="button" class="ob-opt-btn ${val === o ? 'sel' : ''}" data-field="${field.field}" data-val="${o.replace(/"/g, '&quot;')}" onclick="selectOpt(this)">
+          <div class="ob-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          ${o}
+        </button>`).join('')}
+      </div>`;
+    } else {
+      // Native select for long lists
+      input = `<select data-field="${field.field}">
+        <option value="">Tanlang...</option>
+        ${opts.map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`).join('')}
+      </select>`;
+    }
+  } else if (field.type === 'multi_select') {
+    const opts = field.options || [];
+    const selected = Array.isArray(val) ? val : [];
+    input = `<div class="ob-multi-grid">
+      ${opts.map(o => `<button type="button" class="ob-multi-btn ${selected.includes(o) ? 'sel' : ''}" data-field="${field.field}" data-val="${o.replace(/"/g, '&quot;')}" onclick="toggleMulti(this)">
+        <div class="ob-cb">${selected.includes(o) ? '<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ''}</div>
+        ${o}
+      </button>`).join('')}
+    </div>`;
+  }
+
+  return `<div class="ob-field">
+    <div class="ob-label">${field.question}${req}</div>
+    ${input}
+  </div>`;
+}
+
+function restoreFieldValue(field) {
+  // Already set via value="" in HTML; just need to handle native selects
+}
+
+function updateDistrictOptions(region, districtField) {
+  const sel = document.getElementById('district-select');
+  if (!sel) return;
+  const opts = (districtField.options_by_region && districtField.options_by_region[region]) || [];
+  const cur = answers['district'] || '';
+  sel.innerHTML = `<option value="">Tanlang...</option>` +
+    opts.map(o => `<option value="${o}" ${cur === o ? 'selected' : ''}>${o}</option>`).join('');
+}
+
+// ─── Input handlers ───────────────────────────────────────────────────────────
+function selectOpt(btn) {
+  const field = btn.dataset.field;
+  document.querySelectorAll(`.ob-opt-btn[data-field="${field}"]`).forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  answers[field] = btn.dataset.val;
+}
+
+function selectBool(btn) {
+  const field = btn.dataset.field;
+  document.querySelectorAll(`.ob-bool-btn[data-field="${field}"]`).forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  answers[field] = btn.dataset.val;
+}
+
+function toggleMulti(btn) {
+  const field = btn.dataset.field;
+  const val = btn.dataset.val;
+  btn.classList.toggle('sel');
+  if (!Array.isArray(answers[field])) answers[field] = [];
+  if (btn.classList.contains('sel')) {
+    if (!answers[field].includes(val)) answers[field].push(val);
+    btn.querySelector('.ob-cb').innerHTML = '<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  } else {
+    answers[field] = answers[field].filter(v => v !== val);
+    btn.querySelector('.ob-cb').innerHTML = '';
+  }
+}
+
+// ─── Collect current step answers ────────────────────────────────────────────
+function collectAnswers() {
+  const cur = ALL_STEPS[currentIdx];
+  cur.step.fields.forEach(field => {
+    if (field.type === 'text' || field.type === 'date') {
+      const el = document.querySelector(`[data-field="${field.field}"]`);
+      if (el) answers[field.field] = el.value.trim();
+    } else if (field.type === 'textarea') {
+      const el = document.querySelector(`[data-field="${field.field}"]`);
+      if (el) answers[field.field] = el.value.trim();
+    } else if (field.type === 'select' && !field.depends_on) {
+      const el = document.querySelector(`[data-field="${field.field}"]`);
+      if (el && el.tagName === 'SELECT') answers[field.field] = el.value;
+    } else if (field.type === 'select' && field.depends_on) {
+      const el = document.getElementById('district-select');
+      if (el) answers[field.field] = el.value;
+    }
+    // boolean and multi_select are handled via click events
+  });
+}
+
+// ─── Validate required fields ─────────────────────────────────────────────────
+function validateStep() {
+  const cur = ALL_STEPS[currentIdx];
+  for (const field of cur.step.fields) {
+    if (!field.required) continue;
+    const val = answers[field.field];
+    if (val === undefined || val === null || val === '' || (Array.isArray(val) && val.length === 0)) {
+      // Highlight missing
+      const el = document.querySelector(`[data-field="${field.field}"]`);
+      if (el) {
+        el.style.borderColor = 'var(--red)';
+        el.focus();
+        setTimeout(() => el.style.borderColor = '', 2000);
+      }
+      showToast(`"${field.question}" maydonini to'ldiring`, 'error');
+      return false;
+    }
+  }
+  return true;
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+function getCookie(name) {
+  let v = null;
+  document.cookie.split(';').forEach(c => {
+    c = c.trim();
+    if (c.startsWith(name + '=')) v = decodeURIComponent(c.substring(name.length + 1));
+  });
+  return v;
+}
+
+async function saveProgress() {
+  await fetch('/api/user/update/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+    body: JSON.stringify({
+      onboardingData: answers,
+      onboardingProgress: JSON.stringify({ stepListIdx: currentIdx })
+    })
+  });
+}
+
+async function goNext() {
+  collectAnswers();
+  if (!validateStep()) return;
+  await saveProgress();
+
+  if (currentIdx < ALL_STEPS.length - 1) {
+    currentIdx++;
+    renderStep();
+    document.querySelector('.ob-content').scrollTop = 0;
+  } else {
+    // All stages done → IQ test
+    document.getElementById('next-btn').disabled = true;
+    document.getElementById('next-btn').innerHTML = '<div class="sp"></div> Saqlanmoqda...';
+    await saveProgress();
+    window.location.href = '/iq-test/';
+  }
+}
+
+function goBack() {
+  collectAnswers();
+  if (currentIdx > 0) {
+    currentIdx--;
+    renderStep();
+    document.querySelector('.ob-content').scrollTop = 0;
+  }
+}
+
+// ─── Toast ────────────────────────────────────────────────────────────────────
+function showToast(msg, type='info') {
+  const tc = document.getElementById('tc');
+  const t = document.createElement('div');
+  t.className = `tst ${type}`;
+  t.textContent = msg;
+  tc.appendChild(t);
+  setTimeout(() => { t.style.animation = 'fo .3s forwards'; setTimeout(() => t.remove(), 300); }, 3000);
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+renderStep();
+</script>
+{% endblock %}
